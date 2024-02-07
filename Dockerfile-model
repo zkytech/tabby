@@ -5,4 +5,4 @@ RUN mkdir -p /data/models/TabbyML/${MODEL_NAME}/ggml/
 RUN wget https://raw.githubusercontent.com/TabbyML/registry-tabby/main/models.json  -O /data/models/TabbyML/models.json
 RUN cat /data/models/TabbyML/models.json | jq -r ".[] | select(.name == \"${MODEL_NAME}\")" > /data/models/TabbyML/${MODEL_NAME}/tabby.json
 RUN cd /data/models/TabbyML/${MODEL_NAME}/ggml/ && cat /data/models/TabbyML/models.json | jq -r ".[] | select(.name == \"${MODEL_NAME}\").urls[0]" | xargs -I {} wget {} 
-ENTRYPOINT ["/opt/tabby/bin/tabby", "serve --model TabbyML/${MODEL_NAME} --device cuda"]
+ENTRYPOINT ["/opt/tabby/bin/tabby", "serve", "--model", "TabbyML/${MODEL_NAME}", "--device", "cuda"]
