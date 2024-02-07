@@ -105,6 +105,7 @@ pub struct ServeArgs {
 
 pub async fn main(config: &Config, args: &ServeArgs) {
     #[cfg(feature = "experimental-http")]
+    info!("This tabby image is modified by zkytech, \nit will not download model from internet, \nplease upload image by yourself")
     if args.device == Device::ExperimentalHttp {
         tracing::warn!("HTTP device is unstable and does not comply with semver expectations.");
     } else {
