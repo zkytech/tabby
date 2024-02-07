@@ -218,56 +218,56 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: MODEL_NAME=${{ env.MODEL_NAME }}
 
-  release-docker-CodeLlama-13B:
-    runs-on: ubuntu-latest
-    env:
-      MODEL_NAME: CodeLlama-13B
-    permissions:
-      contents: read
-      packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
-      id-token: write
-    steps:
+  # release-docker-CodeLlama-13B:
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     MODEL_NAME: CodeLlama-13B
+  #   permissions:
+  #     contents: read
+  #     packages: write
+  #     # This is used to complete the identity challenge
+  #     # with sigstore/fulcio when running outside of PRs.
+  #     id-token: write
+  #   steps:
 
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+  #       with:
+  #         submodules: recursive
 
-      # Workaround: https://github.com/docker/build-push-action/issues/461
-      - name: Setup Docker buildx
-        uses: docker/setup-buildx-action@v2.0.0
-      - name: Log into Docker Hub
-        uses: docker/login-action@v2.0.0
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #     # Workaround: https://github.com/docker/build-push-action/issues/461
+  #     - name: Setup Docker buildx
+  #       uses: docker/setup-buildx-action@v2.0.0
+  #     - name: Log into Docker Hub
+  #       uses: docker/login-action@v2.0.0
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          # list of Docker images to use as base name for tags
-          images: |
-            zhangkunyuan/tabby
-          # generate Docker tags based on the following events/attributes
-          tags: |
-            type=raw,value=${{ env.MODEL_NAME }}-{{branch}}-{{sha}},enable=${{ startsWith(github.ref, 'refs/heads') }}
-            type=raw,value=${{ env.MODEL_NAME }}-latest,enable=${{ startsWith(github.ref, 'refs/heads') }}
+  #     - name: Docker meta
+  #       id: meta
+  #       uses: docker/metadata-action@v4
+  #       with:
+  #         # list of Docker images to use as base name for tags
+  #         images: |
+  #           zhangkunyuan/tabby
+  #         # generate Docker tags based on the following events/attributes
+  #         tags: |
+  #           type=raw,value=${{ env.MODEL_NAME }}-{{branch}}-{{sha}},enable=${{ startsWith(github.ref, 'refs/heads') }}
+  #           type=raw,value=${{ env.MODEL_NAME }}-latest,enable=${{ startsWith(github.ref, 'refs/heads') }}
       
-      # Build and push Docker image with Buildx (don't push on PR)
-      # https://github.com/docker/build-push-action
-      - name: Build and push Docker image
-        id: build-and-push
-        uses: docker/build-push-action@v3.1.1
-        with:
-          file: Dockerfile-model
-          push: true
-          context: .
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: MODEL_NAME=${{ env.MODEL_NAME }}
+  #     # Build and push Docker image with Buildx (don't push on PR)
+  #     # https://github.com/docker/build-push-action
+  #     - name: Build and push Docker image
+  #       id: build-and-push
+  #       uses: docker/build-push-action@v3.1.1
+  #       with:
+  #         file: Dockerfile-model
+  #         push: true
+  #         context: .
+  #         tags: ${{ steps.meta.outputs.tags }}
+  #         labels: ${{ steps.meta.outputs.labels }}
+  #         build-args: MODEL_NAME=${{ env.MODEL_NAME }}
 
   release-docker-DeepseekCoder-1-3B:
     runs-on: ubuntu-latest
