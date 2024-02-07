@@ -1,3 +1,3 @@
 [submodule "crates/llama-cpp-bindings/llama.cpp"]
 	path = crates/llama-cpp-bindings/llama.cpp
-	url = https://github.com/TabbyML/llama.cpp
+	url = https://gitea.zkytech.top:13443/zhangkunyuan/llama.cpp.git
