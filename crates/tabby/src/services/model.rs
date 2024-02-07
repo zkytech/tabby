@@ -92,6 +92,7 @@ pub async fn download_model_if_needed(model: &str) {
     if fs::metadata(model).is_ok() {
         info!("Loading model from local path {}", model);
     } else {
-        download_model(model, true).await;
+        // download_model(model, true).await;
+        info!("please ask admin to download model {}", model)
     }
 }

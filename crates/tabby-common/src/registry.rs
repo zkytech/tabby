@@ -56,14 +56,14 @@ impl ModelRegistry {
     pub async fn new(registry: &str) -> Self {
         Self {
             name: registry.to_owned(),
-            models: load_remote_registry(registry).await.unwrap_or_else(|err| {
-                load_local_registry(registry).unwrap_or_else(|_| {
+            // load model info from local registry
+            models: load_local_registry(registry).unwrap_or_else(|_| {
                     panic!(
                         "Failed to fetch model organization <{}>: {:?}",
                         registry, err
                     )
                 })
-            }),
+
         }
     }
 
