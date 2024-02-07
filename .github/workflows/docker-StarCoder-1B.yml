@@ -77,8 +77,6 @@ jobs:
           context: .
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: ${{ steps.cache.outputs.cache-from }}
-          cache-to: ${{ steps.cache.outputs.cache-to }}
           build-args: MODEL_NAME=${{ env.MODEL_NAME }}
 
       # - name: Docker Hub Description
