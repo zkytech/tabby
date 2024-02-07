@@ -57,7 +57,7 @@ impl ModelRegistry {
         Self {
             name: registry.to_owned(),
             // load model info from local registry
-            models: load_local_registry(registry).unwrap_or_else(|_| {
+            models: load_local_registry(registry).unwrap_or_else(|err| {
                     panic!(
                         "Failed to fetch model organization <{}>: {:?}",
                         registry, err
