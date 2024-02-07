@@ -1,4 +1,4 @@
-name: Create and publish docker image
+name: Create and publish docker image with model StarCoder-1B
 
 on:
   workflow_dispatch:
@@ -10,8 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  RUST_TOOLCHAIN: 1.73.0
-  IMAGE_NAME: zhangkunyuan/tabby
+  MODEL_NAME: StarCoder-1B
 
 jobs:
   release-docker:
@@ -55,24 +54,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # - name: Generate image name
-      #   run: |
-      #     echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ${{ env.IMAGE_NAME }}
+            zhangkunyuan/tabby-${{ env.MODEL_NAME }}
           # generate Docker tags based on the following events/attributes
           tags: |
             type=raw,value={{branch}}-{{sha}},enable=${{ startsWith(github.ref, 'refs/heads') }}
             type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/heads') }}
-            type=schedule,pattern=nightly
-            type=schedule,pattern={{date 'YYYYMMDD'}}
-            type=semver,pattern={{version}}
       
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -80,12 +72,14 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@v3.1.1
         with:
-          file: Dockerfile
+          file: Dockerfile-model
           push: true
           context: .
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: RUST_TOOLCHAIN=${{ env.RUST_TOOLCHAIN }}
+          cache-from: ${{ steps.cache.outputs.cache-from }}
+          cache-to: ${{ steps.cache.outputs.cache-to }}
+          build-args: MODEL_NAME=${{ env.MODEL_NAME }}
 
       # - name: Docker Hub Description
       #   uses: peter-evans/dockerhub-description@v3
