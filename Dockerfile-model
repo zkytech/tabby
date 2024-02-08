@@ -2,9 +2,9 @@ FROM zhangkunyuan/tabby:latest
 ARG MODEL_NAME="StarCoder-1B"
 RUN apt update && apt install -y jq curl
 RUN mkdir -p /data/models/TabbyML/${MODEL_NAME}/ggml/
-RUN curl https://raw.githubusercontent.com/TabbyML/registry-tabby/main/models.json  -R -o /data/models/TabbyML/models.json
+RUN curl https://raw.githubusercontent.com/TabbyML/registry-tabby/main/models.json -L -R -o /data/models/TabbyML/models.json
 RUN cat /data/models/TabbyML/models.json | jq -r ".[] | select(.name == \"${MODEL_NAME}\")" > /data/models/TabbyML/${MODEL_NAME}/tabby.json
-RUN cd /data/models/TabbyML/${MODEL_NAME}/ggml/ && cat /data/models/TabbyML/models.json | jq -r ".[] | select(.name == \"${MODEL_NAME}\").urls[0]" | xargs -I {} curl {} -R -o q8_0.v2.gguf
+RUN cd /data/models/TabbyML/${MODEL_NAME}/ggml/ && cat /data/models/TabbyML/models.json | jq -r ".[] | select(.name == \"${MODEL_NAME}\").urls[0]" | xargs -I {} curl {} -L -R -o q8_0.v2.gguf
 RUN echo "/opt/tabby/bin/tabby serve --model TabbyML/${MODEL_NAME} --device cuda \$1" > ./start.sh
 ENV TABBY_DISABLE_USAGE_COLLECTION=1
 ENTRYPOINT ["/bin/bash", "./start.sh"]
