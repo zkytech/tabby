@@ -4,7 +4,7 @@ RUN apt update && apt install -y jq wget
 RUN mkdir -p /data/models/TabbyML/${MODEL_NAME}/ggml/
 RUN wget https://raw.githubusercontent.com/TabbyML/registry-tabby/main/models.json  -O /data/models/TabbyML/models.json
 RUN cat /data/models/TabbyML/models.json | jq -r ".[] | select(.name == \"${MODEL_NAME}\")" > /data/models/TabbyML/${MODEL_NAME}/tabby.json
-RUN cd /data/models/TabbyML/${MODEL_NAME}/ggml/ && cat /data/models/TabbyML/models.json | jq -r ".[] | select(.name == \"${MODEL_NAME}\").urls[0]" | xargs -I {} wget {} 
+RUN cd /data/models/TabbyML/${MODEL_NAME}/ggml/ && cat /data/models/TabbyML/models.json | jq -r ".[] | select(.name == \"${MODEL_NAME}\").urls[0]" | xargs -I {} wget {} -O q8_0.v2.gguf
 RUN echo "/opt/tabby/bin/tabby serve --model TabbyML/${MODEL_NAME} --device cuda" > ./start.sh
 ENV TABBY_DISABLE_USAGE_COLLECTION=1
 ENTRYPOINT ["/bin/bash", "./start.sh"]
