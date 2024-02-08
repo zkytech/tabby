@@ -3,6 +3,7 @@
 
 this project is forked from [TabbyML/tabby](https://github.com/TabbyML/tabby)
 
+modified by [zkytech](https://github.com/zkytech/tabby)
 
 ## change in this fork
 
