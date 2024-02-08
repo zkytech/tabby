@@ -10,6 +10,7 @@ modified by [zkytech](https://github.com/zkytech/tabby)
 1. For users from china and those who want to deploy this project in offline environment: remove the code to download model from network, direct load from local.
 2. Package model files into docker image.
 3. Change entry point command to `/opt/tabby/bin/tabby serve --model TabbyML/${MODEL_NAME} --device cuda \$1`
+4. GPU is required, no CPU support because of bad experience.
 
 ## simple usage example
 
