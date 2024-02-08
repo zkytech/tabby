@@ -53,6 +53,8 @@ RUN apt-get update && \
         git \
         openssh-client \
         ca-certificates \
+        curl \
+        jq \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*

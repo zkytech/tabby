@@ -1,6 +1,5 @@
 FROM zhangkunyuan/tabby:latest
 ARG MODEL_NAME="StarCoder-1B"
-RUN apt update && apt install -y jq curl
 RUN mkdir -p /data/models/TabbyML/${MODEL_NAME}/ggml/
 RUN curl https://raw.githubusercontent.com/TabbyML/registry-tabby/main/models.json -L -R -o /data/models/TabbyML/models.json
 RUN cat /data/models/TabbyML/models.json | jq -r ".[] | select(.name == \"${MODEL_NAME}\")" > /data/models/TabbyML/${MODEL_NAME}/tabby.json
